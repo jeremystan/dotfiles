@@ -5,8 +5,8 @@ echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
 
-ln -sf ${BASEDIR}/.p10k.zsh.sh ${HOME}/.p10k.zsh
-ln -sf ${BASEDIR}/.zshrc.sh ${HOME}/.zshrc
+ln -sf ${BASEDIR}/.p10k.zsh ${HOME}/.p10k.zsh
+ln -sf ${BASEDIR}/.zshrc ${HOME}/.zshrc
 
 # install fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git --branch 0.29.0 ~/.fzf
