@@ -1,105 +1,83 @@
-# Path to your oh-my-zsh installation.
-export ZSH=/Users/jeremystanley/.oh-my-zsh
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="mh"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+alias brew86="arch --x86_64 /usr/local/bin/brew"
+export NVM_DIR="/Users/jeremystanley/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+export STAN_BACKEND=CMDSTANPY
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+## Begin from Leo
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Snappy escape
+export KEYTIMEOUT=1
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# History
+setopt INC_APPEND_HISTORY        # Share history between all sessions.
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+HISTSIZE=50000                   # The maximum number of events to save in the internal history.
+SAVEHIST=50000                   # The maximum number of events to save in the history file.
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# This is for fzf fuzzy finder
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+## End from Leo
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+# Run emacs in "no window" mode
+alias emacs='emacs -nw'
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+# Git aliases
+alias gbr="git branch | grep -v "master" | xargs git branch -D"
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
+alias gsha="git rev-parse HEAD | tr -d '\n' | pbcopy"
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+# Postgres is the fastest default DB
+export DG_DEMO_DB=postgres
 
-# User configuration
+# Run dquality unit tests using pt <test>
+function pt() { python -m unittest tests.unit.$1; }
 
-# export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-# export MANPATH="/usr/local/man:$MANPATH"
+# Run www tests in www directory using ptw <test>
+function ptw() { python manage.py test tests.unit.$1; }
 
-source $ZSH/oh-my-zsh.sh
+# Run a test on a specific DB and then switch back using pt_db <DB> <test>
+function pt_db() {
+    CURR=$DG_DEMO_DB
+    echo "Testing on: $1"
+    export DG_DEMO_DB=$1
+    python -m unittest tests.unit.$2
+    echo "resetting backend to $CURR"
+    export DG_DEMO_DB=$CURR
+}
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+# Run a test across _all_ DBs using pt_all <DB> <test>
+function pt_all() {
+    CURR=$DG_DEMO_DB
+    for BACKEND in postgres redshift bigquery snowflake presto athena databricks synapse
+    do
+	echo "Testing on: $BACKEND"
+	export DG_DEMO_DB=$BACKEND
+	python -m unittest tests.unit.$1
+    done
+    echo "resetting backend to $CURR"
+    export DG_DEMO_DB=$CURR
+}
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+function dg_query() {
+    ./dg query exec --config demos/tickit/db.jsonnet "$@";
+}
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# syntax highlighting
-source ~/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-# Enable z
-. `brew --prefix`/etc/profile.d/z.sh
-
-export EDITOR=emacs
-alias gl="git log --graph --all --decorate --color"
-alias gla="git log --all --graph --decorate --oneline --abbrev-commit"
-alias gfrm="git fetch origin;git rebase origin/master"
-
-# for R path
-export PATH="/Library/Frameworks/R.framework/Versions/current/Resources:$PATH"
-export GITHUB_USERNAME="jeremystan"
-eval "$(rbenv init -)"
-export GITHUB_USERNAME="jeremystan"
-
-# Ipython tricks
-alias ipy="python -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
-alias actvenv="source venv/bin/activate"
+export ANOMALO_DISABLE_MULTIPROCESSING=true
