@@ -14,5 +14,9 @@ git clone --depth 1 https://github.com/junegunn/fzf.git --branch 0.29.0 ~/.fzf
 
 chsh --shell /usr/bin/zsh
 
+# install ag
+sudo apt update
+sudo apt-get install silversearcher-ag
+
 # git config
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
