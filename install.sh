@@ -16,7 +16,8 @@ chsh --shell /usr/bin/zsh
 
 # Install software
 apt -o DPkg::Lock::Timeout=120 update
-apt -o DPkg::Lock::Timeout=10 install -y silversearcher-ag
+apt -o DPkg::Lock::Timeout=10 install -y \
+    silversearcher-ag tmux emacs
 
 # git config
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
