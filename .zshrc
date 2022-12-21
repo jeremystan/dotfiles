@@ -30,6 +30,9 @@ git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Crese
 
 alias gsha="git rev-parse HEAD | tr -d '\n' | pbcopy"
 
+# Testing aliases
+alias pturl="tac logs/test.log | grep \"'exec_summary_url':\" --max-count 1"
+
 
 # Postgres is the fastest default DB
 export DG_DEMO_DB=postgres
