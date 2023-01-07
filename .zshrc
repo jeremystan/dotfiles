@@ -24,6 +24,9 @@ SAVEHIST=50000                   # The maximum number of events to save in the h
 # Run emacs in "no window" mode
 alias emacs='emacs -nw'
 
+# Git configuration
+git config pull.rebase false
+
 # Git aliases
 alias gbr="git branch | grep -v "master" | xargs git branch -D"
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
