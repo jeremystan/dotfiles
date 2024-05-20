@@ -21,6 +21,9 @@ SAVEHIST=50000                   # The maximum number of events to save in the h
 
 ## End from Leo
 
+# Install ag
+apt-get install silversearcher-ag
+
 # Run emacs in "no window" mode
 alias emacs='emacs -nw'
 
