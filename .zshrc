@@ -82,3 +82,8 @@ function dg_query() {
 [ -f ~/powerlevel10k/powerlevel10k.zsh-theme ] && . ~/powerlevel10k/powerlevel10k.zsh-theme
 
 export ANOMALO_DISABLE_MULTIPROCESSING=true
+
+# For running the app in codespaces
+export RUN_CONTROLLERS_INLINE=False
+export RUN_WORKERS_INLINE=False
+export CELERY_TASK_ALWAYS_EAGER=True
