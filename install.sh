@@ -7,17 +7,18 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Symlink dotfiles
 ln -sf "${BASEDIR}/.p10k.zsh" "${HOME}/.p10k.zsh"
 ln -sf "${BASEDIR}/.zshrc"    "${HOME}/.zshrc"
+ln -sf "${BASEDIR}/.bash_profile" "${HOME}/.bash_profile"
 
 # macOS setup
 if [[ "$(uname -s)" == "Darwin" ]]; then
-  # Homebrew (assumes Apple Silicon default prefix; adjust if Intel Mac)
   if ! command -v brew >/dev/null 2>&1; then
     echo "Homebrew not found. Install it first: https://brew.sh/"
     exit 1
   fi
 
   brew update
-  brew install powerlevel10k fzf ripgrep tmux emacs
+  brew install powerlevel10k fzf ripgrep tmux emacs pyenv pyenv-virtualenv
+  brew install --cask font-jetbrains-mono-nerd-font
 
   # Enable fzf keybindings/completion
   "$(brew --prefix)/opt/fzf/install" --all --no-bash --no-fish || true

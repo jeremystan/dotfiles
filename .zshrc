@@ -24,8 +24,13 @@ HISTSIZE=50000
 SAVEHIST=50000
 
 # ---- Tools ----
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 alias emacs='emacs -nw'
+
+# fzf (Homebrew)
+if command -v brew >/dev/null 2>&1; then
+  [[ -r "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh" ]] && source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
+  [[ -r "$(brew --prefix)/opt/fzf/shell/completion.zsh"   ]] && source "$(brew --prefix)/opt/fzf/shell/completion.zsh"
+fi
 
 # ---- Git helpers ----
 # Delete all local branches except master/main/current branch
@@ -46,5 +51,12 @@ git config --global --get alias.lg >/dev/null 2>&1 || \
 alias gsha="git rev-parse HEAD | tr -d '\n' | pbcopy"
 
 # ---- Prompt (Powerlevel10k) ----
-source /opt/homebrew/opt/powerlevel10k/powerlevel10k.zsh-theme
+if command -v brew >/dev/null 2>&1; then
+  P10K_THEME="$(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme"
+  [[ -r "$P10K_THEME" ]] && source "$P10K_THEME"
+else
+  # Fallback if brew isn't available for some reason
+  [[ -r /opt/homebrew/opt/powerlevel10k/powerlevel10k.zsh-theme ]] && source /opt/homebrew/opt/powerlevel10k/powerlevel10k.zsh-theme
+fi
+
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
