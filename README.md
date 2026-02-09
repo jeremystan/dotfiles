@@ -69,6 +69,9 @@ command -v fzf && fzf --version
 test -f ~/.p10k.zsh && echo "~/.p10k.zsh OK"
 print -P '%F{green}p10k prompt render test%f'
 
+# 4b) Powerlevel10k actually loaded
+echo "POWERLEVEL9K_VERSION=$POWERLEVEL9K_VERSION"
+
 # 5) pyenv working
 command -v pyenv && pyenv --version
 pyenv root

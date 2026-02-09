@@ -52,7 +52,7 @@ alias gsha="git rev-parse HEAD | tr -d '\n' | pbcopy"
 
 # ---- Prompt (Powerlevel10k) ----
 if command -v brew >/dev/null 2>&1; then
-  P10K_THEME="$(brew --prefix)/opt/powerlevel10k/powerlevel10k.zsh-theme"
+  P10K_THEME="$(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme"
   [[ -r "$P10K_THEME" ]] && source "$P10K_THEME"
 else
   # Fallback if brew isn't available for some reason
@@ -60,3 +60,5 @@ else
 fi
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
