@@ -1,22 +1,48 @@
-# Install p10k
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
+#!/usr/bin/env bash
+set -euo pipefail
 
-SCRIPT=$(readlink -f "$0")
-BASEDIR=$(dirname "$SCRIPT")
+# Resolve script dir (works on macOS + Linux)
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-ln -sf ${BASEDIR}/.p10k.zsh ${HOME}/.p10k.zsh
-ln -sf ${BASEDIR}/.zshrc ${HOME}/.zshrc
+# Symlink dotfiles
+ln -sf "${BASEDIR}/.p10k.zsh" "${HOME}/.p10k.zsh"
+ln -sf "${BASEDIR}/.zshrc"    "${HOME}/.zshrc"
 
-# install fzf
-git clone --depth 1 https://github.com/junegunn/fzf.git --branch 0.29.0 ~/.fzf
-~/.fzf/install --all --no-bash
+# macOS setup
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  # Homebrew (assumes Apple Silicon default prefix; adjust if Intel Mac)
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Homebrew not found. Install it first: https://brew.sh/"
+    exit 1
+  fi
 
-chsh --shell /usr/bin/zsh
+  brew update
+  brew install powerlevel10k fzf ripgrep tmux emacs
 
-# Install software
-apt -o DPkg::Lock::Timeout=120 update
-apt -o DPkg::Lock::Timeout=10 install -y \
-    silversearcher-ag tmux emacs
+  # Enable fzf keybindings/completion
+  "$(brew --prefix)/opt/fzf/install" --all --no-bash --no-fish || true
 
-# git config
-git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+  # Ensure login shell is zsh (usually already)
+  if [[ "${SHELL:-}" != "/bin/zsh" ]]; then
+    chsh -s /bin/zsh || true
+  fi
+
+else
+  # Debian/Ubuntu setup (Codespaces, etc.)
+  sudo apt -o DPkg::Lock::Timeout=120 update
+  sudo apt -o DPkg::Lock::Timeout=10 install -y \
+    silversearcher-ag tmux emacs ripgrep
+
+  # fzf from git (or apt, if you prefer)
+  if [[ ! -d "${HOME}/.fzf" ]]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}/.fzf"
+    "${HOME}/.fzf/install" --all --no-bash --no-fish
+  fi
+fi
+
+# Git config (set once)
+git config --global --get alias.lg >/dev/null 2>&1 || \
+  git config --global alias.lg \
+    "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+echo "Done."
