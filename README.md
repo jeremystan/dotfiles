@@ -1,22 +1,48 @@
 # dotfiles
 
-My . files
+My dotfiles for a clean macOS setup (zsh + Homebrew + Powerlevel10k).
 
 ## Installation
 
-First, install Homebrew:
+### 1. Install Homebrew
 
-``` bash
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-Follow their instructions. Then, run this install:
+Follow Homebrew’s instructions and open a **new terminal window** afterward.
 
-``` bash
+### 2. Run the installer
+
+From the repo root:
+
+```bash
 ./install.sh
 ```
 
-Then restart your terminal and it should work!
+This will:
+
+- Symlink `.zshrc` and `.p10k.zsh`
+- Install core tools via Homebrew (fzf, ripgrep, tmux, emacs, pyenv, etc.)
+- Install a Nerd Font for Powerlevel10k
+
+Restart your terminal when it finishes.
+
+### 3. Set your terminal font (one-time)
+
+Set your terminal font to:
+
+**JetBrainsMono Nerd Font**
+
+- Terminal.app: Settings → Profiles → Text → Font
+- iTerm2: Settings → Profiles → Text → Font
+- VS Code: `terminal.integrated.fontFamily`
+
+If icons look wrong, run:
+
+```bash
+p10k configure
+```
 
 ## Verification (post-install)
 
@@ -49,3 +75,5 @@ pyenv root
 pyenv versions
 python3 --version
 ```
+
+If all of the above pass and your prompt renders cleanly, you’re done.
