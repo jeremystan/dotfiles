@@ -7,7 +7,6 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Symlink dotfiles
 ln -sf "${BASEDIR}/.p10k.zsh" "${HOME}/.p10k.zsh"
 ln -sf "${BASEDIR}/.zshrc"    "${HOME}/.zshrc"
-ln -sf "${BASEDIR}/.bash_profile" "${HOME}/.bash_profile"
 
 # macOS setup
 if [[ "$(uname -s)" == "Darwin" ]]; then
