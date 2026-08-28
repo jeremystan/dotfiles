@@ -67,3 +67,4 @@ fi
 
 export EDITOR=emacs
 export VISUAL=emacs
+export PATH="$HOME/.local/bin:$PATH"
